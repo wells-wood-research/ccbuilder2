@@ -1,4 +1,9 @@
-version: '2'
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "50m"
+    max-file: "3"
+
 services:
   ccbuilder2-web:
     build:
@@ -12,7 +17,8 @@ services:
     #   - ./web:/app
     depends_on:
       - ccbuilder2-db
-    restart: on-failure
+    restart: unless-stopped
+    logging: *default-logging
   # ccbuilder2-optimisation:
   #   build:
   #     context: ./ccbuilder2/
@@ -26,3 +32,5 @@ services:
   #     - ccbuilder2-db
   ccbuilder2-db:
     image: mongo
+    restart: unless-stopped
+    logging: *default-logging
